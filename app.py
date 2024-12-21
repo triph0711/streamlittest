@@ -1,5 +1,6 @@
 import streamlit as st
-import speech_recognition as sr
+import openai
+#import speech_recognition as sr
 
 def transcribe_speech():
     r = sr.Recognizer()
