@@ -1,34 +1,24 @@
+pip install streamlit speech_recognition
 import streamlit as st
 import speech_recognition as sr
-import tempfile
-import os
 
-# Streamlit app title
-st.title("Speech-to-Text Tool")
-
-st.write("Click the button below to record your speech and see it transcribed.")
-
-# Button to start recording
-if st.button("Start Recording"):
-    st.write("Recording... Speak into your microphone.")
-    
-    # Use the SpeechRecognition library to capture audio
-    recognizer = sr.Recognizer()
+def transcribe_speech():
+    r = sr.Recognizer()
     with sr.Microphone() as source:
-        try:
-            # Adjust for ambient noise and record audio
-            recognizer.adjust_for_ambient_noise(source, duration=1)
-            st.write("Listening...")
-            audio = recognizer.listen(source, timeout=5)
+        st.write("Speak now...")
+        audio = r.listen(source)
 
-            # Transcribe speech to text
-            st.write("Processing your speech...")
-            text = recognizer.recognize_google(audio)
-            st.success(f"Transcription: {text}")
+    try:
+        text = r.recognize_google(audio)
+        st.write("You said:", text)
 
-        except sr.UnknownValueError:
-            st.error("Sorry, I couldn't understand the audio. Please try again.")
-        except sr.RequestError as e:
-            st.error(f"Error with the Speech Recognition service: {e}")
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+    except sr.UnknownValueError:
+        st.write("Sorry, I could not understand your speech.")
+    except sr.RequestError as e:
+        st.write(f"Could not request results from Google Speech Recognition service; {e}")
+
+# Streamlit app
+st.title("Speech-to-Text App")
+
+if st.button("Start Recording"):
+    transcribe_speech()
