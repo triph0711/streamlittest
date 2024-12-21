@@ -1,1 +1,2 @@
-speech_recognition
+streamlit==1.28.1
+speech_recognition==3.10.0
